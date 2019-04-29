@@ -1,6 +1,6 @@
 
 public class Chessboard {
-	
+
 	private static String[] coord = {
 			"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
 			"a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
@@ -15,34 +15,51 @@ public class Chessboard {
 	private Piece[] board = {
 			new Tower(2), new Knight(2), new Bishop(2), new Queen(2), new King(2), new Bishop(2), new Knight(2), new Tower(2),
 			new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2),
-			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), 
-			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), 
-			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), 
-			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), 
+			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
+			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
+			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
+			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
 			new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
 			new Tower(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1), new Tower(1),
 	};
 	private boolean roque;
 	private String[] history;
-	
+
 	public Chessboard() {
 		this.tourJeu = 1;
 		this.roque = true;
-		
+
 	}
-	
+
 	public int getTourJeu() {
 		return this.tourJeu;
 	}
-	
+
+	public int getJoueurAdverse() {
+		return 2 - (this.getTourJeu() +1) % 2;
+	}
+
 	public void joueurAdverse() {
 		this.tourJeu = 2 - (this.getTourJeu() + 1)%2;
 	}
-	
+
 	public Piece[] getBoard() {
 		return this.board;
 	}
-	
+
+	public Piece getCase(int pos) {
+		return this.board[pos];
+	}
+
+	public int indexOf(Piece p){
+		for (int i = 0; i < this.getBoard().length; i++){
+			if (this.getCase(i) == p){
+				return i;
+			}
+		}
+		return -1;
+	}
+
 	public static void main(String[] args) {
 		Chessboard c = new Chessboard();
 		System.out.println(c.getTourJeu());
@@ -52,7 +69,7 @@ public class Chessboard {
 		System.out.println(c.getTourJeu());
 		Piece[] board = c.getBoard();
 		System.out.println(c.getBoard()[12].isEmpty());
-		
+
 	}
-	
+
 }
