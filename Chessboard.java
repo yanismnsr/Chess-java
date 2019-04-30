@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Chessboard {
 
@@ -59,6 +60,38 @@ public class Chessboard {
 		}
 		return -1;
 	}
+
+
+	public ArrayList<Integer> casesMangeablesPar(int joueur){
+
+		ArrayList<Integer> liste = new ArrayList<Integer>();
+		ArrayList<Integer> sousListe = new ArrayList<Integer>();
+		Piece p;
+		for (int i = 0; i < this.board.length; i++){
+			p = this.getCase(i);
+			if (p.getColor() == joueur){
+				if (p instanceof Pawn){
+					sousListe = ((Pawn)p).casesMangeables(this);
+					liste.addAll(sousListe);
+				}else if(p instanceof Tower){
+					sousListe = ((Tower)p).casesMangeables(this);
+					liste.addAll(sousListe);
+				}else if(p instanceof Knight){
+					sousListe = ((Knight)p).casesMangeables(this);
+					liste.addAll(sousListe);
+				}else if(p instanceof Bishop){
+					sousListe = ((Bishop)p).casesMangeables(this);
+					liste.addAll(sousListe);
+				}else if (p instanceof Queen){
+					sousListe = ((Queen)p).casesMangeables(this);
+					liste.addAll(sousListe);
+				}
+			}
+		}
+		return liste;
+
+	}
+
 
 	public static void main(String[] args) {
 		Chessboard c = new Chessboard();
