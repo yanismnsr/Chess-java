@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 
 public class Pawn extends Piece{
@@ -19,10 +21,10 @@ public class Pawn extends Piece{
 	// à utiliser pour interdir certains mouvements du roi
 	public ArrayList<Integer> casesMangeables(Chessboard board){
 
-		ArrayList<Integer> liste = new ArrayList<Integer>();
+		//ArrayList<Integer> liste = new ArrayList<Integer>();
 		int[] depMangeables = {-11, -9};
 		int index = board.indexOf(this);
-		int pos;
+		// int pos;
 		int coef;
 		if (this.getColor() == 1){
 			coef = 1;
@@ -30,6 +32,13 @@ public class Pawn extends Piece{
 			coef = -1;
 		}
 
+
+		 return new ArrayList<Integer>(Arrays.stream(depMangeables)
+				.map(x -> Piece.getCase120(Piece.getCase64(index) + coef * x))
+				.filter(x -> x !=1).boxed()
+				.collect(Collectors.toList()));
+
+		/*
 		for (int i = 0; i < depMangeables.length; i++){
 			pos = Piece.getCase120(Piece.getCase64(index) + coef * depMangeables[i]);
 			if (pos != -1){
@@ -37,7 +46,7 @@ public class Pawn extends Piece{
 			}
 		}
 
-		return liste;
+		return liste;*/
 	}
 
 
@@ -54,6 +63,8 @@ public class Pawn extends Piece{
 			coef = -1;
 		}
 
+
+
 		int pos = Piece.getCase120(Piece.getCase64(index) + coef * Pawn.listeMouvements[0]); // obtention de la case qui correspond à la case 1 de la liste des mouvements possibles prévue
 
 		if (pos != -1) {														// si on a pas débordé
@@ -62,6 +73,14 @@ public class Pawn extends Piece{
 				liste.add(pos);													// on ajoute la case à la liste
 			}
 		}
+
+		Arrays.stream(Pawn.listeMouvements)
+				.map(x -> Piece.getCase120(Piece.getCase64(index) + coef * x)).filter(x -> x != -1)
+				.filter(x -> board.getCase(x).getColor() == board.getJoueurAdverse())
+				.forEach(x -> liste.add(x));
+
+
+		/*
 		for (int i = 1; i < Pawn.listeMouvements.length; i++) {					// on parcours la liste des mouvements
 			pos = Piece.getCase120(Piece.getCase64(index) + coef * Pawn.listeMouvements[i]);	// initialisation de la position avec le premier coup dans le tableau
 			if (pos != -1){														// si on déborde pas
@@ -70,7 +89,7 @@ public class Pawn extends Piece{
 					liste.add(pos);												// rajouter la case à la liste des mouvements (on peut la manger)
 				}
 			}
-		}
+		}*/
 
 		if (this.firstMove) {													// si le pion n'a jamais bougé, il peut avancer de 2 cases
 			pos = Piece.getCase120(Piece.getCase64(index) + coef * Pawn.listeFirstMoove[0]);	// on récupère la position correspondante à la position selon listeFirstMoove
@@ -85,10 +104,12 @@ public class Pawn extends Piece{
 	// controle si le mouvement est dans la liste des déplcaments
 	public boolean mouvementValide(int positionDepart, int positionArrive, Chessboard board) {
 		ArrayList<Integer> a = this.movements(board);
+		/*
 		if (a.contains(positionArrive)) {
 			return true;
 		}
-		return false;
+		return false;*/
+		return a.contains(positionArrive);
 	}
 	
 	

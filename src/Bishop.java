@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Bishop extends Piece {
@@ -21,19 +22,25 @@ public class Bishop extends Piece {
 				pos = Piece.getCase120(Piece.getCase64(index) + j * Bishop.listeMouvements[i]);
 			}
 			switch (option) {
-				case 0:
-				if (pos != -1 && board.getCase(pos).getColor() == this.getColor()) {
+				case 0: {if (pos != -1 && board.getCase(pos).getColor() == this.getColor()) {
 					liste.add(pos);
 				}
-				case 1:
-					if (pos != -1 && board.getCase(pos).getColor() != this.getColor()) {
+				}
+				case 1: {if (pos != -1 && board.getCase(pos).getColor() != this.getColor()) {
 						liste.add(pos);
 					}
+				}
 			}
 		}
 
 		return liste;
 	}
+
+
+
+
+
+
 
 	public ArrayList<Integer> casesMangeables(Chessboard board){
 		return function(board, 0);
@@ -83,7 +90,6 @@ public class Bishop extends Piece {
 			}
 		}
 		return liste;
-<<<<<<< HEAD
 	}*/
 
 	

@@ -1,4 +1,8 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 
 public class Knight extends Piece{
@@ -9,7 +13,27 @@ public class Knight extends Piece{
 		super(color);
 	}
 
+	private ArrayList<Integer> function(Chessboard board, int option){
+		int index = board.indexOf(this);
+		IntStream stream = Arrays.stream(Knight.listeMouvements).map(x -> Piece.getCase120(Piece.getCase64(index) + x));
+		switch (option){
+			case 0: stream = stream.filter(x -> x != -1 && board.getCase(x).getColor() == this.getColor());
+			case 1: stream = stream.filter(x -> x != -1 && board.getCase(x).getColor() != this.getColor());
+		}
+		return  new ArrayList<>(stream.boxed().collect(Collectors.toList()));
 
+	}
+
+	public ArrayList<Integer> casesMangeables(Chessboard board){
+		return function(board, 0);
+	}
+
+	public ArrayList<Integer> movements(Chessboard board){
+		return function(board, 1);
+	}
+
+
+	/*
 	public ArrayList<Integer> casesMangeables(Chessboard board){
 
 		ArrayList<Integer> liste = new ArrayList<Integer>();
@@ -42,7 +66,7 @@ public class Knight extends Piece{
 		}
 
 		return liste;
-	}
+	}*/
 	
 	
 	public String toString(){
