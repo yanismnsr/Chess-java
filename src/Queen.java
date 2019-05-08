@@ -47,6 +47,15 @@ public class Queen extends Piece{
 		return liste;
 
 	}
+	
+	
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9813;
+		}else{
+			return "" + (char)9819;
+		}
+	}
 
 
 	public static void main(String[] args){
