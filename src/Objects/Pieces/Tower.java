@@ -1,3 +1,7 @@
+package Objects.Pieces;
+
+import Objects.Chessboard;
+
 import java.util.ArrayList;
 
 

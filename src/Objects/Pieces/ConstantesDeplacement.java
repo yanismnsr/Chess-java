@@ -1,3 +1,4 @@
+package Objects.Pieces;
 
 public interface ConstantesDeplacement {
 	

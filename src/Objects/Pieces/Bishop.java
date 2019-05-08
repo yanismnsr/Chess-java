@@ -1,7 +1,11 @@
+package Objects.Pieces;
+
+import Objects.Chessboard;
+
 import java.util.ArrayList;
 
 
-public class Bishop extends Piece{
+public class Bishop extends Piece {
 
 	public static int[] listeMouvements = {-11, -9, 9, 11};
 
@@ -22,7 +26,7 @@ public class Bishop extends Piece{
 				liste.add(pos);
 				pos = Piece.getCase120(Piece.getCase64(index) + j * Bishop.listeMouvements[i]);
 			}
-			if (pos != -1 && board.getCase(pos).getColor == this.getColor()){
+			if (pos != -1 && board.getCase(pos).getColor() == this.getColor()){
 				liste.add(pos);
 			}
 		}
