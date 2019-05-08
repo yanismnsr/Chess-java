@@ -1,5 +1,3 @@
-package Objects.Pieces;
-
 public interface ConstantesDeplacement {
 	
 	int[] tab120 = {

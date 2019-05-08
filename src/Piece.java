@@ -1,5 +1,3 @@
-package Objects.Pieces;
-
 public class Piece implements ConstantesDeplacement{
 
 	private int color = 0;

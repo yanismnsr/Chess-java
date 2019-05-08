@@ -1,8 +1,5 @@
-package Objects;
-
-import Objects.Pieces.*;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Chessboard {
 
@@ -56,21 +53,45 @@ public class Chessboard {
 		return this.board[pos];
 	}
 
+
 	public int indexOf(Piece p){
+		/*
 		for (int i = 0; i < this.getBoard().length; i++){
 			if (this.getCase(i) == p){
 				return i;
 			}
 		}
-		return -1;
+		return -1;*/
+		return java.util.Arrays.asList(board).indexOf(p);
 	}
 
 
 	public ArrayList<Integer> casesMangeablesPar(int joueur){
+		ArrayList<Integer> liste = new ArrayList<Integer>();
 
+		Arrays.stream(board).filter(p -> p.getColor() == joueur).forEach(p -> {
+			if (p instanceof Pawn){
+				liste.addAll(((Pawn)p).casesMangeables(this));
+			}else if(p instanceof Tower){
+				liste.addAll(((Tower)p).casesMangeables(this));
+			}else if(p instanceof Knight){
+				liste.addAll(((Knight)p).casesMangeables(this));
+			}else if(p instanceof Bishop){
+				liste.addAll(((Bishop)p).casesMangeables(this));
+			}else if (p instanceof Queen) {
+				liste.addAll(((Queen) p).casesMangeables(this));
+			}
+		});
+
+		return liste;
+
+
+
+		/*
 		ArrayList<Integer> liste = new ArrayList<Integer>();
 		ArrayList<Integer> sousListe = new ArrayList<Integer>();
 		Piece p;
+
 		for (int i = 0; i < this.board.length; i++){
 			p = this.getCase(i);
 			if (p.getColor() == joueur){
@@ -92,7 +113,7 @@ public class Chessboard {
 				}
 			}
 		}
-		return liste;
+		return liste;*/
 
 	}
 
@@ -106,6 +127,7 @@ public class Chessboard {
 		System.out.println(c.getTourJeu());
 		Piece[] board = c.getBoard();
 		System.out.println(c.getBoard()[12].isEmpty());
+		System.out.println(c.casesMangeablesPar(1));
 
 	}
 

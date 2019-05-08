@@ -1,5 +1,3 @@
-package Objects;
-
 public class Player {
 	
 	private String name;
