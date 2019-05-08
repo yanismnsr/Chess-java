@@ -1,3 +1,7 @@
+package objects.pieces;
+
+import objects.Chessboard;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -26,8 +30,8 @@ public class King extends Piece{
 				.boxed().collect(Collectors.toList()));
 
 		/*
-		for (int i = 0; i < King.listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + King.listeMouvements[i]);
+		for (int i = 0; i < objects.pieces.King.listeMouvements.length; i++){
+			pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + objects.pieces.King.listeMouvements[i]);
 			if (pos != -1 && !mouvementsInterdits.contains(pos) && board.getCase(pos).getColor() != this.getColor()){
 				liste.add(pos);
 			}

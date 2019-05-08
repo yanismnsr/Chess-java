@@ -1,3 +1,5 @@
+package objects.pieces;
+
 public interface ConstantesDeplacement {
 	
 	int[] tab120 = {

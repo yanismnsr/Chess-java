@@ -1,3 +1,7 @@
+package objects;
+
+import objects.pieces.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -90,25 +94,25 @@ public class Chessboard {
 		/*
 		ArrayList<Integer> liste = new ArrayList<Integer>();
 		ArrayList<Integer> sousListe = new ArrayList<Integer>();
-		Piece p;
+		objects.pieces.Piece p;
 
 		for (int i = 0; i < this.board.length; i++){
 			p = this.getCase(i);
 			if (p.getColor() == joueur){
-				if (p instanceof Pawn){
-					sousListe = ((Pawn)p).casesMangeables(this);
+				if (p instanceof objects.pieces.Pawn){
+					sousListe = ((objects.pieces.Pawn)p).casesMangeables(this);
 					liste.addAll(sousListe);
-				}else if(p instanceof Tower){
-					sousListe = ((Tower)p).casesMangeables(this);
+				}else if(p instanceof objects.pieces.Tower){
+					sousListe = ((objects.pieces.Tower)p).casesMangeables(this);
 					liste.addAll(sousListe);
-				}else if(p instanceof Knight){
-					sousListe = ((Knight)p).casesMangeables(this);
+				}else if(p instanceof objects.pieces.Knight){
+					sousListe = ((objects.pieces.Knight)p).casesMangeables(this);
 					liste.addAll(sousListe);
-				}else if(p instanceof Bishop){
-					sousListe = ((Bishop)p).casesMangeables(this);
+				}else if(p instanceof objects.pieces.Bishop){
+					sousListe = ((objects.pieces.Bishop)p).casesMangeables(this);
 					liste.addAll(sousListe);
-				}else if (p instanceof Queen){
-					sousListe = ((Queen)p).casesMangeables(this);
+				}else if (p instanceof objects.pieces.Queen){
+					sousListe = ((objects.pieces.Queen)p).casesMangeables(this);
 					liste.addAll(sousListe);
 				}
 			}

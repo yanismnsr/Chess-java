@@ -1,3 +1,5 @@
+package objects.pieces;
+
 public class Piece implements ConstantesDeplacement{
 
 	private int color = 0;

@@ -1,3 +1,7 @@
+package objects.pieces;
+
+import objects.Chessboard;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -40,7 +44,7 @@ public class Pawn extends Piece{
 
 		/*
 		for (int i = 0; i < depMangeables.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + coef * depMangeables[i]);
+			pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + coef * depMangeables[i]);
 			if (pos != -1){
 				liste.add(pos);
 			}
@@ -81,8 +85,8 @@ public class Pawn extends Piece{
 
 
 		/*
-		for (int i = 1; i < Pawn.listeMouvements.length; i++) {					// on parcours la liste des mouvements
-			pos = Piece.getCase120(Piece.getCase64(index) + coef * Pawn.listeMouvements[i]);	// initialisation de la position avec le premier coup dans le tableau
+		for (int i = 1; i < objects.pieces.Pawn.listeMouvements.length; i++) {					// on parcours la liste des mouvements
+			pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + coef * objects.pieces.Pawn.listeMouvements[i]);	// initialisation de la position avec le premier coup dans le tableau
 			if (pos != -1){														// si on déborde pas
 				p = board.getCase(pos);											// on récupère la case correspondante à la position
 				if (p.getColor() == board.getJoueurAdverse()) {					// si dans la case il y a une pièce adverse

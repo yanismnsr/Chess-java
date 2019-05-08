@@ -1,5 +1,8 @@
+package objects.pieces;
+
+import objects.Chessboard;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Bishop extends Piece {
@@ -53,16 +56,16 @@ public class Bishop extends Piece {
 
 
 /*
-	public ArrayList<Integer> casesMangeables(Chessboard board){
+	public ArrayList<Integer> casesMangeables(objects.Chessboard board){
 
 		ArrayList<Integer> liste = new ArrayList<Integer>();
 		int index = board.indexOf(this);
 		int pos;
-		for (int i = 0; i < Bishop.listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + Bishop.listeMouvements[i]);
+		for (int i = 0; i < objects.pieces.Bishop.listeMouvements.length; i++){
+			pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + objects.pieces.Bishop.listeMouvements[i]);
 			for (int j = 0; pos != -1 && board.getCase(pos).isEmpty(); j++){
 				liste.add(pos);
-				pos = Piece.getCase120(Piece.getCase64(index) + j * Bishop.listeMouvements[i]);
+				pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + j * objects.pieces.Bishop.listeMouvements[i]);
 			}
 			if (pos != -1 && board.getCase(pos).getColor() == this.getColor()){
 				liste.add(pos);
@@ -73,17 +76,17 @@ public class Bishop extends Piece {
 	}
 
 
-	public ArrayList<Integer> movements(Chessboard board){
+	public ArrayList<Integer> movements(objects.Chessboard board){
 
 		ArrayList<Integer> liste = new ArrayList<Integer>();
 		int pos;
 		int index = board.indexOf(this);
 
-		for (int i = 0; i < Bishop.listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + Bishop.listeMouvements[i]);
+		for (int i = 0; i < objects.pieces.Bishop.listeMouvements.length; i++){
+			pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + objects.pieces.Bishop.listeMouvements[i]);
 			for (int j = 2; pos != -1 && board.getCase(pos).isEmpty(); j++){
 				liste.add(pos);
-				pos = Piece.getCase120(Piece.getCase64(index) + j * Bishop.listeMouvements[i]);
+				pos = objects.pieces.Piece.getCase120(objects.pieces.Piece.getCase64(index) + j * objects.pieces.Bishop.listeMouvements[i]);
 			}
 			if (pos != -1 && board.getCase(pos).getColor() != this.getColor()){
 				liste.add(pos);
