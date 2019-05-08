@@ -16,8 +16,8 @@ public class Knight extends Piece{
 		int pos;
 		int index = board.indexOf(this);
 
-		for (int i = 0; i < listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + listeMouvements[i]);
+		for (int i = 0; i < Knight.listeMouvements.length; i++){
+			pos = Piece.getCase120(Piece.getCase64(index) + Knight.listeMouvements[i]);
 			if (pos != -1 && board.getCase(pos).getColor() == this.getColor()){
 				liste.add(pos);
 			}
