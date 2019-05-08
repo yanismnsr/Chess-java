@@ -90,6 +90,15 @@ public class Pawn extends Piece{
 		}
 		return false;
 	}
+	
+	
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9817;
+		}else{
+			return "" + (char)9823;
+		}
+	}
 
 
 	public static void main (String[] args) {

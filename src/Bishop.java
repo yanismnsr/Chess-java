@@ -83,7 +83,19 @@ public class Bishop extends Piece {
 			}
 		}
 		return liste;
+<<<<<<< HEAD
 	}*/
+
+	
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9815;
+		}else{
+			return "" + (char)9821;
+		}
+	}
+
+
 
 	public static void main(String[] args){
 		Chessboard b = new Chessboard();

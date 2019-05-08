@@ -43,6 +43,16 @@ public class Knight extends Piece{
 
 		return liste;
 	}
+	
+	
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9816;
+		}else{
+			return "" + (char)9822;
+		}
+	}
+	
 
 	public static void main(String[] args){
 		Chessboard b = new Chessboard();

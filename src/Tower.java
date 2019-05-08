@@ -48,6 +48,15 @@ public class Tower extends Piece{
 		return liste;
 
 	}
+	
+	
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9814;
+		}else{
+			return "" + (char)9820;
+		}
+	}
 
 
 	public static void main (String[] args){

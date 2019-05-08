@@ -27,6 +27,16 @@ public class King extends Piece{
 		return liste;
 
 	}
+	
+	
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9812;
+		}else{
+			return "" + (char)9818;
+		}
+	}
+	
 
 	public static void main (String[] args){
 		Chessboard b = new Chessboard();
