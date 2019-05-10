@@ -120,6 +120,142 @@ public class Chessboard {
 		return liste;*/
 
 	}
+	
+	
+		public String boardToFEN(){
+		String chaine = "";
+		Piece p;
+		int vide;
+		for (int i = 0; i < 8; i++){
+			for (int j = 0; j <  8; j++){
+
+				p = this.getCase(8*i + j);
+				if (p.isEmpty()){
+					vide = 1;
+					j ++;
+					while (j < 8){
+						p = this.getCase(8*i + j);
+						if (p.isEmpty()){
+							vide++;
+							j++;
+						}else{
+							j--;
+							break;
+						}
+					}
+					chaine += vide;
+				}else{
+					chaine += p.pieceToFEN();
+				}
+
+			}
+			if (i != 7){
+				chaine += "/";
+			}
+		}
+		return chaine;
+	}
+
+
+	public static Piece fenToPiece(char caracter){
+		Piece p = new Piece();
+		switch (caracter){
+			case 'P' :
+				p = new Pawn(1);
+				break;
+			case 'K':
+				p = new King(1);
+				break;
+			case 'Q':
+				p = new Queen(1);
+				break;
+			case 'R':
+				p = new Tower(1);
+				break;
+			case 'N':
+				p = new Knight(1);
+				break;
+			case 'B':
+				p = new Bishop(1);
+				break;
+			case 'p' :
+				p = new Pawn(2);
+				break;
+			case 'k':
+				p = new King(2);
+				break;
+			case 'q':
+				p = new Queen(2);
+				break;
+			case 'r':
+				p = new Tower(2);
+				break;
+			case 'n':
+				p = new Knight(2);
+				break;
+			case 'b':
+				p = new Bishop(2);
+				break;
+		}
+		return p;
+	}
+
+
+	public static Piece[] fenToBoard(String chaine){
+		String[] lignes = chaine.split("/");
+		Piece[] board = new Piece[64];
+		int cptBoard = 0;
+		for (String ligne : lignes){
+			for (int i = 0; i < ligne.length(); i++){
+				char c = ligne.charAt(i);
+				if ((int)c <= (int)'8' && (int)c >= (int)'1'){
+					for (int j = 0; j < Integer.parseInt("" + c); j++){
+						board[cptBoard] = new Piece();
+						cptBoard++;
+					}
+				}else{
+					board[cptBoard] = Chessboard.fenToPiece(c);
+					cptBoard++;
+				}
+			}
+		}
+		return board;
+	}
+
+	public void sauvegarder(){
+		try{
+			File fichier = new File("sauvegarde_partie.txt");
+			FileWriter fw = new FileWriter(fichier);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(this.tourJeu + "\n");
+			bw.write(this.roque + "\n");
+			bw.write(this.boardToFEN());
+			bw.close();
+			fw.close();
+		}catch (IOException e){
+			System.out.println(e);
+		}
+	}
+
+
+	public void charger(){
+		try{
+			FileReader fr = new FileReader(new File("sauvegarde_partie.txt"));
+			BufferedReader br = new BufferedReader(fr);
+			int tourJeu = Integer.parseInt(br.readLine());
+			String line = br.readLine();
+			boolean roque = line.equals("true");
+			line = br.readLine();
+			Piece[] board = Chessboard.fenToBoard(line);
+			this.tourJeu = tourJeu;
+			this.roque = roque;
+			this.board = board;
+			br.close();
+			fr.close();
+		}catch (IOException e){
+			System.out.println(e);
+		}
+	}
 
 
 	public static void main(String[] args) {
