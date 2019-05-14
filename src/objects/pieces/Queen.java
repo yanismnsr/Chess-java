@@ -95,6 +95,15 @@ public class Queen extends Piece{
 			return "" + (char)9819;
 		}
 	}
+	
+	
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "Q";
+		}else{
+			return "q";
+		}
+	}
 
 
 	public static void main(String[] args){
