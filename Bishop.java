@@ -51,6 +51,15 @@ public class Bishop extends Piece{
 		return liste;
 
 	}
+	
+	
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "B";
+		}else{
+			return "b";
+		}
+	}
 
 
 	public static void main(String[] args){
