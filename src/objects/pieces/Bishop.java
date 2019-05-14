@@ -103,6 +103,15 @@ public class Bishop extends Piece {
 			return "" + (char)9821;
 		}
 	}
+	
+	
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "B";
+		}else{
+			return "b";
+		}
+	}
 
 
 
