@@ -94,6 +94,15 @@ public class Tower extends Piece{
 			return "" + (char)9820;
 		}
 	}
+	
+	
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "R";		// Rook
+		}else{
+			return "r";
+		}
+	}
 
 
 	public static void main (String[] args){
