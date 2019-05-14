@@ -161,10 +161,10 @@ public class Chessboard {
 		}
 		return chaine;
 	}
+	
 
-	private String buildString(char c, int n) {
-		char[] arr = new char[n];
-		Arrays.fill(arr, c);
+	private String makeSpace(int n) {
+		char [] arr = new char[n]; Arrays.fill(arr, ' ');
 		return new String(arr);
 	}
 
@@ -176,7 +176,7 @@ public class Chessboard {
 			String formatstring = string.toString();
 			for (int i = 8;  i >= 0; i --){
 				if (!formatstring.contains(" ")) break;
-				formatstring = formatstring.replace(buildString(' ', i), String.valueOf(i));
+				formatstring = formatstring.replace(makeSpace(i), String.valueOf(i));
 			}
 			allchaine.append(formatstring + "/");
 		});
