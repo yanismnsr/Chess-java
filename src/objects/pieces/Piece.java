@@ -24,6 +24,12 @@ public class Piece implements ConstantesDeplacement{
 	public static int getCase64(int position) {
 		return ConstantesDeplacement.tab64[position];
 	}
+	
+	
+	public String pieceToFEN(){
+		return "";
+	}
+	
 
 	public static void main(String[] args) {
 		Piece p = new Piece();
