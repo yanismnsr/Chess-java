@@ -26,6 +26,10 @@ public class Piece implements ConstantesDeplacement{
 		return ConstantesDeplacement.tab64[position];
 	}
 	
+	public String pieceToFEN(){
+		return "";
+	}
+	
 	public static void main(String[] args) {
 		Piece p = new Piece();
 		System.out.println(p.isEmpty());
