@@ -124,6 +124,15 @@ public class Pawn extends Piece{
 			return "" + (char)9823;
 		}
 	}
+	
+	
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "P";
+		}else{
+			return "p";
+		}
+	}
 
 
 	public static void main (String[] args) {
