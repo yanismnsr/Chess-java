@@ -81,6 +81,15 @@ public class Knight extends Piece{
 		}
 	}
 	
+	
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "N";
+		}else{
+			return "n";
+		}
+	}
+	
 
 	public static void main(String[] args){
 		Chessboard b = new Chessboard();
