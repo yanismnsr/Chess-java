@@ -2,8 +2,10 @@ package objects;
 
 import objects.pieces.*;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class Chessboard {
 
@@ -18,6 +20,7 @@ public class Chessboard {
 			"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 	};
 	private int tourJeu;
+	/*
 	private Piece[] board = {
 			new Tower(2), new Knight(2), new Bishop(2), new Queen(2), new King(2), new Bishop(2), new Knight(2), new Tower(2),
 			new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2), new Pawn(2),
@@ -27,13 +30,16 @@ public class Chessboard {
 			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
 			new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
 			new Tower(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1), new Tower(1),
-	};
+	};*/
+
+	private Piece[] board;
 	private boolean roque;
 	private String[] history;
 
 	public Chessboard() {
 		this.tourJeu = 1;
 		this.roque = true;
+		this.board = Chessboard.fenToBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 
 	}
 
@@ -156,6 +162,27 @@ public class Chessboard {
 		return chaine;
 	}
 
+	private String buildString(char c, int n) {
+		char[] arr = new char[n];
+		Arrays.fill(arr, c);
+		return new String(arr);
+	}
+
+	public String boardToFEN2() {
+		StringBuilder allchaine = new StringBuilder();
+		IntStream.range(8, 65).filter(n -> n % 8 == 0).forEachOrdered(n -> {
+			StringBuilder string = new StringBuilder(8);
+			Arrays.stream(Arrays.copyOfRange(this.board, n - 8, n)).forEach(p -> string.append(p.pieceToFEN()));
+			String formatstring = string.toString();
+			for (int i = 8;  i >= 0; i --){
+				if (!formatstring.contains(" ")) break;
+				formatstring = formatstring.replace(buildString(' ', i), String.valueOf(i));
+			}
+			allchaine.append(formatstring + "/");
+		});
+		return allchaine.deleteCharAt(allchaine.length() -1 ).toString();
+	}
+
 
 	public static Piece fenToPiece(char caracter){
 		Piece p = new Piece();
@@ -233,7 +260,7 @@ public class Chessboard {
 			bw.close();
 			fw.close();
 		}catch (IOException e){
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -253,7 +280,7 @@ public class Chessboard {
 			br.close();
 			fr.close();
 		}catch (IOException e){
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -268,6 +295,8 @@ public class Chessboard {
 		Piece[] board = c.getBoard();
 		System.out.println(c.getBoard()[12].isEmpty());
 		System.out.println(c.casesMangeablesPar(1));
+		System.out.println(c.boardToFEN());
+		System.out.println(c.boardToFEN2());
 
 	}
 

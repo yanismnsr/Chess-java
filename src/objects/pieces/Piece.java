@@ -27,7 +27,8 @@ public class Piece implements ConstantesDeplacement{
 	
 	
 	public String pieceToFEN(){
-		return "";
+		// return "";
+		return " ";
 	}
 	
 
