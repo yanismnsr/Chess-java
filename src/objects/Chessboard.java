@@ -161,7 +161,7 @@ public class Chessboard {
 		}
 		return chaine;
 	}
-	
+
 
 	private String makeSpace(int n) {
 		char [] arr = new char[n]; Arrays.fill(arr, ' ');
@@ -223,6 +223,9 @@ public class Chessboard {
 			case 'b':
 				p = new Bishop(2);
 				break;
+			case ' ':
+				p = new Piece();
+				break;
 		}
 		return p;
 	}
@@ -247,6 +250,20 @@ public class Chessboard {
 			}
 		}
 		return board;
+	}
+
+	public Piece[] fenToBoard2(String chaine) {
+		ArrayList<Piece> board = new ArrayList<>();
+		for (int i=8; i>=0; i--){
+			if (!chaine.matches(".*\\d.*")) break; // If chaine don't have numbers
+			chaine = chaine.replace(String.valueOf(i), makeSpace(i));
+		}
+		char[] arr = chaine.replace("/", "").toCharArray();
+		System.out.println(chaine);
+		IntStream.range(0, arr.length).mapToObj(i -> arr[i]).forEach(c -> board.add(fenToPiece(c)));
+
+		return board.toArray(new Piece[0]);
+
 	}
 
 	public void sauvegarder(){
@@ -298,6 +315,9 @@ public class Chessboard {
 		System.out.println(c.boardToFEN());
 		System.out.println(c.boardToFEN2());
 
-	}
+		System.out.println(c.fenToBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR").length);
 
+		System.out.println(c.fenToBoard2("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR").length);
+
+	}
 }
