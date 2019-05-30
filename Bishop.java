@@ -53,6 +53,15 @@ public class Bishop extends Piece{
 	}
 
 
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9815;
+		}else{
+			return "" + (char)9821;
+		}
+	}
+
+
 	public String pieceToFEN(){
 		if (this.getColor() == 1){
 			return "B";
@@ -64,9 +73,10 @@ public class Bishop extends Piece{
 
 	public static void main(String[] args){
 		Chessboard b = new Chessboard();
-		Bishop bis = (Bishop)b.getCase(43);
+		Bishop bis = (Bishop)b.getCase(58);
 		System.out.println(bis.movements(b));
-		System.out.println("" + (char)9812);
+		System.out.println(b.casesMangeablesPar(2));
+		System.out.println(bis);
 	}
 
 }
