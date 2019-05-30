@@ -27,8 +27,17 @@ public class King extends Piece{
 		return liste;
 
 	}
-	
-	
+
+
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9812;
+		}else{
+			return "" + (char)9818;
+		}
+	}
+
+
 	public String pieceToFEN(){
 		if (this.getColor() == 1){
 			return "K";
@@ -36,12 +45,13 @@ public class King extends Piece{
 			return "k";
 		}
 	}
-	
+
 
 	public static void main (String[] args){
 		Chessboard b = new Chessboard();
 		King k = (King)b.getCase(59);
 		System.out.println(k.movements(b));
+		System.out.println(k);
 	}
 
 }
