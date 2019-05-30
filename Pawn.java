@@ -16,7 +16,7 @@ public class Pawn extends Piece{
 		this.firstMove = b;
 	}
 
-	// à utiliser pour interdir certains mouvements du roi
+
 	public ArrayList<Integer> casesMangeables(Chessboard board){
 
 		ArrayList<Integer> liste = new ArrayList<Integer>();
@@ -91,15 +91,31 @@ public class Pawn extends Piece{
 		return false;
 	}
 
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9817;
+		}else{
+			return "" + (char)9823;
+		}
+	}
+
+
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "P";
+		}else{
+			return "p";
+		}
+	}
+
 
 	public static void main (String[] args) {
 		Chessboard b = new Chessboard();
-		Pawn p = (Pawn)b.getCase(49);
+		Pawn p = (Pawn)b.getCase(8);
 		ArrayList<Integer> a = p.movements(b);
 		System.out.println(a);
 		System.out.println(p.casesMangeables(b));
+		System.out.println(p);
 	}
 
 }
-
-
