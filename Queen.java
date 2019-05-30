@@ -49,6 +49,12 @@ public class Queen extends Piece{
 	}
 
 
+	public boolean mouvementValide(Chessboard board, int pos){
+		ArrayList<Integer> mouvements = this.movements(board);
+		return mouvements.contains(pos);
+	}
+
+
 	public String toString(){
 		if (this.getColor() == 1){
 			return "" + (char)9813;

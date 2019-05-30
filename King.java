@@ -47,6 +47,12 @@ public class King extends Piece{
 	}
 
 
+	public boolean mouvementValide(Chessboard board, int pos){
+		ArrayList<Integer> mouvements = this.movements(board);
+		return mouvements.contains(pos);
+	}
+
+
 	public static void main (String[] args){
 		Chessboard b = new Chessboard();
 		King k = (King)b.getCase(59);

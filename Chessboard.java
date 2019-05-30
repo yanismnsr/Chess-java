@@ -1,8 +1,30 @@
 import java.io.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class Chessboard {
+
+
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLACK = "\u001B[30m";
+	public static final String ANSI_RED = "\u001B[31m";
+	public static final String ANSI_GREEN = "\u001B[32m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_BLUE = "\u001B[34m";
+	public static final String ANSI_PURPLE = "\u001B[35m";
+	public static final String ANSI_CYAN = "\u001B[36m";
+	public static final String ANSI_WHITE = "\u001B[37m";
+
+	public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+	public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+	public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+	public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+	public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
+	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
 
 	private static String[] coord = {
 			"a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
@@ -27,10 +49,18 @@ public class Chessboard {
 	};
 	private boolean roque;
 	private String[] history;
+	private Player joueurs[] = new Player[2];
 
 	public Chessboard() {
 		this.tourJeu = 1;
 		this.roque = true;
+	}
+
+	public Chessboard(String player1, String player2) {
+		this.tourJeu = 1;
+		this.roque = true;
+		this.joueurs[0] = new Player(player1, 1);
+		this.joueurs[1] = new Player(player2, 2);
 	}
 
 	public Chessboard(Piece[] board, int tourJeu, boolean roque){
@@ -57,6 +87,10 @@ public class Chessboard {
 
 	public Piece getCase(int pos) {
 		return this.board[pos];
+	}
+
+	public void setCase(int pos, Piece p){
+		this.board[pos] = p;
 	}
 
 	public int indexOf(Piece p){
@@ -236,6 +270,114 @@ public class Chessboard {
 	}
 
 
+	private String getLine(int i){
+		String line = "   ";
+		for (int j = 0; j < 8; j++){
+			if ((i-j)%2 == 0){
+				line = line + Chessboard.ANSI_WHITE_BACKGROUND + "       " + Chessboard.ANSI_RESET;
+			}
+			else{
+				line = line + Chessboard.ANSI_BLUE_BACKGROUND + "       " + Chessboard.ANSI_RESET;
+			}
+		}
+		line += "\n " + (8-i) + " ";
+		for (int j = 0; j < 8; j++){
+			if ((i-j)%2 == 0){
+				line = line + Chessboard.ANSI_BLACK + Chessboard.ANSI_WHITE_BACKGROUND + "   " + this.getCase(i*8 + j) + "   " + Chessboard.ANSI_RESET;
+			}
+			else{
+				line = line + Chessboard.ANSI_BLACK + Chessboard.ANSI_BLUE_BACKGROUND + "   " + this.getCase(i*8 + j) + "   " + Chessboard.ANSI_RESET;
+			}
+		}
+		line += "\n   ";
+		for (int j = 0; j < 8; j++){
+			if ((i-j)%2 == 0){
+				line = line + Chessboard.ANSI_WHITE_BACKGROUND + "       " + Chessboard.ANSI_RESET;
+			}
+			else{
+				line = line + Chessboard.ANSI_BLUE_BACKGROUND + "       " + Chessboard.ANSI_RESET;
+			}
+		}
+		line += "\n";
+		return line;
+	}
+
+
+	private String getLastLine(){
+		String line = "   ";
+		char c = 'A';
+		for (int i = 0; i < 8; i++){
+			line += "   " + (char)((int)c + i) + "   ";
+		}
+		line += "\n";
+		return line;
+	}
+
+
+	public void show(){
+		String board = "";
+		for (int i = 0; i < 8; i++){
+			board += this.getLine(i);
+		}
+		board += this.getLastLine();
+		System.out.println(board);
+	}
+
+
+	public boolean deplacer(int posDepart, int posArrive){
+		Piece pd = this.getCase(posDepart);
+		if (pd.isEmpty()){
+			return false;
+		}
+		if (pd instanceof Pawn){
+			Pawn piece = (Pawn)pd;
+			if (!piece.mouvementValide(this, posArrive)){
+				return false;
+			}
+			piece.setFirstMove(false);
+		}else if(pd instanceof Bishop){
+			Bishop piece = (Bishop)pd;
+			if (!piece.mouvementValide(this, posArrive)){
+				return false;
+			}
+		}else if (pd instanceof King){
+			King piece = (King)pd;
+			if (!piece.mouvementValide(this, posArrive)){
+				return false;
+			}
+		}else if (pd instanceof Knight){
+			Knight piece = (Knight)pd;
+			if (!piece.mouvementValide(this, posArrive)){
+				return false;
+			}
+		}else if (pd instanceof Queen){
+			Queen piece = (Queen)pd;
+			if (!piece.mouvementValide(this, posArrive)){
+				return false;
+			}
+		}else{
+			Tower piece = (Tower)pd;
+			if (!piece.mouvementValide(this, posArrive)){
+				return false;
+			}
+		}
+
+
+		Piece pa = this.getCase(posArrive);
+		if (pa.isEmpty()){
+			this.setCase(posArrive, pd);
+			this.setCase(posDepart, pa);
+		}else{
+			this.setCase(posArrive, pd);
+			this.setCase(posDepart, new Piece());
+			Player player = this.joueurs[this.getTourJeu() - 1];
+			player.manger(pa);
+		}
+		return true;
+
+	}
+
+
 	public static void main(String[] args) {
 		Chessboard c = new Chessboard();
 		System.out.println(c.getTourJeu());
@@ -256,6 +398,12 @@ public class Chessboard {
 		for (int i = 0; i< b.length; i++){
 			System.out.println(b[i]);
 		}
+		System.out.print(c.getLine(2));
+		System.out.println(c.getLastLine());
+		c.show();
+		c.deplacer(49, 33);
+		c.deplacer(33, 17);
+		c.show();
 	}
 
 }

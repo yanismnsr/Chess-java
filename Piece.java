@@ -30,6 +30,10 @@ public class Piece implements ConstantesDeplacement{
 		return "";
 	}
 
+	public String toString(){
+		return " ";
+	}
+
 	public static void main(String[] args) {
 		Piece p = new Piece();
 		System.out.println(p.isEmpty());

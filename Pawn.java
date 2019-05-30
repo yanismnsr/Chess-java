@@ -83,13 +83,12 @@ public class Pawn extends Piece{
 
 
 	// controle si le mouvement est dans la liste des déplcaments
-	public boolean mouvementValide(int positionDepart, int positionArrive, Chessboard board) {
-		ArrayList<Integer> a = this.movements(board);
-		if (a.contains(positionArrive)) {
-			return true;
-		}
-		return false;
+	public boolean mouvementValide(Chessboard board, int pos){
+		ArrayList<Integer> mouvements = this.movements(board);
+		return mouvements.contains(pos);
 	}
+
+	
 
 	public String toString(){
 		if (this.getColor() == 1){
