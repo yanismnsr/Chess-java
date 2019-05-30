@@ -44,6 +44,25 @@ public class Knight extends Piece{
 		return liste;
 	}
 
+
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9816;
+		}else{
+			return "" + (char)9822;
+		}
+	}
+
+
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "N";
+		}else{
+			return "n";
+		}
+	}
+
+
 	public static void main(String[] args){
 		Chessboard b = new Chessboard();
 		Piece p = b.getCase(1);
@@ -52,6 +71,7 @@ public class Knight extends Piece{
 			ArrayList<Integer> a = k.movements(b);
 			System.out.println(a);
 			System.out.println(k.casesMangeables(b));
+			System.out.println(k);
 		}
 	}
 
