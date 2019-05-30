@@ -49,11 +49,30 @@ public class Queen extends Piece{
 	}
 
 
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9813;
+		}else{
+			return "" + (char)9819;
+		}
+	}
+
+
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "Q";
+		}else{
+			return "q";
+		}
+	}
+
+
 	public static void main(String[] args){
 		Chessboard b = new Chessboard();
 		Queen q = (Queen)b.getCase(3);
 		System.out.println(q.movements(b));
 		System.out.println(q.casesMangeables(b));
+		System.out.println(q);
 	}
 
 }
