@@ -50,11 +50,30 @@ public class Tower extends Piece{
 	}
 
 
+	public String toString(){
+		if (this.getColor() == 1){
+			return "" + (char)9814;
+		}else{
+			return "" + (char)9820;
+		}
+	}
+
+
+	public String pieceToFEN(){
+		if (this.getColor() == 1){
+			return "R";		// Rook
+		}else{
+			return "r";
+		}
+	}
+
+
 	public static void main (String[] args){
 		Chessboard b = new Chessboard();
 		Tower t = (Tower)b.getCase(56);
 		System.out.println(t.movements(b));
 		System.out.println(t.casesMangeables(b));
+		System.out.println(t);
 	}
 
 }
