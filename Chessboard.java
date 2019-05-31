@@ -2,6 +2,7 @@ import java.io.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Color;
+import java.util.Scanner;
 
 public class Chessboard {
 
@@ -56,6 +57,14 @@ public class Chessboard {
 		this.roque = true;
 	}
 
+
+	public boolean caseValide(int pos){
+		if (pos < 0 || pos >= this.board.length){
+			return false;
+		}
+		return true;
+	}
+
 	public Chessboard(String player1, String player2) {
 		this.tourJeu = 1;
 		this.roque = true;
@@ -67,6 +76,11 @@ public class Chessboard {
 		this.board = board;
 		this.tourJeu = tourJeu;
 		this.roque = roque;
+	}
+
+
+	public static void effacerTerminal(){
+		System.out.print("\033\143");
 	}
 
 	public int getTourJeu() {
@@ -378,7 +392,104 @@ public class Chessboard {
 	}
 
 
+	public int[] chaineToMouv(String chaine){
+		int[] mouv = new int[2];
+		chaine = chaine.toUpperCase();
+		if (chaine.length() != 4){
+			return new int[0];
+		}else{
+			int j = (int)chaine.charAt(0) - (int)'A';
+			int i = (int)chaine.charAt(1) - (int)'1';
+			mouv[0] = (7-i)*8 + j;
+			j = (int)chaine.charAt(2) - (int)'A';
+			i = (int)chaine.charAt(3) - (int)'1';
+			mouv[1] = (7-i)*8 + j;
+			if (!(this.caseValide(mouv[0]) && this.caseValide(mouv[1]))){
+				return new int[0];
+			}
+		}
+		return mouv;
+	}
+
+
+	public int[] saisirMouvement(){
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Joueur " + this.getTourJeu());
+		System.out.println("Saisir un mouvement");
+		String mouvement = sc.nextLine();
+		int[] tab_mouvement = this.chaineToMouv(mouvement);
+		while (tab_mouvement.length != 2){
+			System.out.println("mouvement invalide \nsaisir un mouvement");
+			mouvement = sc.nextLine();
+			tab_mouvement = this.chaineToMouv(mouvement);
+		}
+		return tab_mouvement;
+	}
+
+
+	public static void afficherMenu(){
+		boolean sauvegarde = false;
+		File fichier = new File("sauvegarde_partie.txt");
+		if (fichier.exists() && !fichier.isDirectory()){
+			sauvegarde = true;
+		}
+		String chaine = "MENU\n- 0 pour terminer le jeu\n- 1 pour commencer une nouvelle partie";
+		if (sauvegarde){
+			chaine += "\n- 2 pour charger la partie";
+		}
+		System.out.println(chaine);
+	}
+
+
+	public static int choixMenu(){
+		Chessboard.effacerTerminal();
+		Chessboard.afficherMenu();
+		Scanner sc = new Scanner(System.in);
+		String choix = sc.nextLine();
+		while (choix.length() != 1 || ((int)choix.charAt(0)-(int)'0') > 2 || ((int)choix.charAt(0)-(int)'0') < 0){
+			Chessboard.effacerTerminal();
+			System.out.println("Choix invalide, saisissez votre choix :");
+			Chessboard.afficherMenu();
+			choix = sc.nextLine();
+		}
+		return ((int)choix.charAt(0)-(int)'0');
+	}
+
+
+	public static Chessboard menu(){
+		int choix = choixMenu();
+		if (choix == 0){
+			System.exit(0);
+		}else if (choix == 1) {
+			Player players[] = nouvellePartie();
+			return new Chessboard(players[0], players[1]);
+		}else{
+			Chessboard c = new Chessboard();
+			c.charger();
+			return c;
+		}
+	}
+
+
+	public static Player[] nouvellePartie(){
+		Scanner sc = new Scanner(System.in);
+		Player players[] = new Player[2];
+		do{
+			System.out.println("saisir le nom du joueur 1 : ");
+			String joueur = sc.nextLine();
+			players[0] = new Player(joueur, 1);
+		}while (joueur.length() != 0);
+		do{
+			System.out.println("saisir le nom du joueur 2 : ");
+			String joueur = sc.nextLine();
+			players[1] = new Player(joueur, 2);
+		}while (joueur.length() != 0);
+		return players;
+	}
+
+
 	public static void main(String[] args) {
+
 		Chessboard c = new Chessboard();
 		System.out.println(c.getTourJeu());
 		c.joueurAdverse();
@@ -404,6 +515,9 @@ public class Chessboard {
 		c.deplacer(49, 33);
 		c.deplacer(33, 17);
 		c.show();
+
+		System.out.println(c.chaineToMouv("a1a2")[0]);
+		Chessboard.choixMenu();
 	}
 
 }
