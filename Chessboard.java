@@ -486,7 +486,7 @@ public class Chessboard {
 		}while (joueur.length() != 0);
 		return players;
 	}
-
+	
 
 	public static void main(String[] args) {
 
