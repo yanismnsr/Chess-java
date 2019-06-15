@@ -529,10 +529,10 @@ public class Chessboard {
 			}
 		}
 		int adverse;
-		if (numJoueur == this.getTourJeu()){
-			adverse = this.getJoueurAdverse();
+		if (numJoueur == 1){
+			adverse = 2;
 		}else{
-			adverse = numJoueur;
+			adverse = 1;
 		}
 		ArrayList <Integer> a = this.mouvementsDuJoueur(adverse);
 		if (a.contains(posRoi)){
@@ -540,6 +540,25 @@ public class Chessboard {
 		}else{
 			return false;
 		}
+	}
+
+
+	public boolean echecEtMat(int numJoueur){
+
+		int posRoi;
+		Piece king = new Piece();
+		for (int i = 0; i < this.board.length; i++){
+			king = this.getCase(i);
+			if (king instanceof King && king.getColor() == numJoueur){
+				posRoi = i;
+				break;
+			}
+		}
+		if (this.echec(numJoueur) && ((King)king).movements(this).size() == 0){
+			return true;
+		}
+		return false;
+
 	}
 
 
@@ -577,6 +596,7 @@ public class Chessboard {
 		Chessboard.menu();
 		c.show();
 		System.out.println(c.echec(1));
+		System.out.println(c.echecEtMat(1));
 	}
 
 }
