@@ -370,8 +370,20 @@ public class Chessboard {
 	}
 
 
-	public boolean deplacer(int posDepart, int posArrive){
+	public boolean deplacer(int[] tabDep){
+		if (tabDep.length != 2){
+			return false;
+		}
+		if (this.mouvementsDuJoueur(this.getTourJeu()).size() == 0){
+			this.joueurAdverse();
+			return true;
+		}
+		int posDepart = tabDep[0];
+		int posArrive = tabDep[1];
 		Piece pd = this.getCase(posDepart);
+		if (this.getCase(posDepart).getColor() != this.getTourJeu()){
+			return false;
+		}
 		if (pd.isEmpty()){
 			return false;
 		}
@@ -419,6 +431,7 @@ public class Chessboard {
 			Player player = this.joueurs[this.getTourJeu() - 1];
 			player.manger(pa);
 		}
+		this.joueurAdverse();
 		return true;
 
 	}
@@ -488,22 +501,19 @@ public class Chessboard {
 	}
 
 
-	public static Chessboard menu(){
+	public void menu(){
 		int choix = choixMenu();
 		if (choix == 0){
 			System.exit(0);
-			return new Chessboard();
 		}else if (choix == 1) {
-			return Chessboard.nouvellePartie();
+			this.nouvellePartie();
 		}else{
-			Chessboard c = new Chessboard();
-			c.charger();
-			return c;
+			this.charger();
 		}
 	}
 
 
-	public static Chessboard nouvellePartie(){
+	public void nouvellePartie(){
 		Scanner sc = new Scanner(System.in);
 		String players[] = new String[2];
 		do{
@@ -514,7 +524,10 @@ public class Chessboard {
 			System.out.println("saisir le nom du joueur 2 : ");
 			players[1] = sc.nextLine();
 		}while (players[1].length() == 0);
-		return new Chessboard(players[0], players[1]);
+		this.joueurs[0] = new Player(players[0], 1);
+		this.joueurs[1] = new Player(players[1], 2);
+		this.tourJeu = 1;
+		this.roque = true;
 	}
 
 
@@ -562,41 +575,39 @@ public class Chessboard {
 	}
 
 
+	public boolean pat(){
+		if (!(this.echecEtMat(1) && this.echecEtMat(2)) && this.mouvementsDuJoueur(1).size() == 0 && this.mouvementsDuJoueur(2).size() == 0){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean partieFinie(){
+		return this.pat() || (this.echecEtMat(1) && this.echecEtMat(2));
+	}
+
+
+	public void jouer(){
+		this.effacerTerminal();
+		this.show();
+		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
+		this.deplacer(this.saisirMouvement());
+		while (! this.partieFinie()){
+			this.jouer();
+		}
+	}
+
+	public static void partie(){
+		Chessboard board = new Chessboard();
+		board.menu();
+		board.jouer();
+	}
+
+
 
 	public static void main(String[] args) {
+		Chessboard.partie();
 
-		Chessboard c = new Chessboard();
-		System.out.println(c.getTourJeu());
-		c.joueurAdverse();
-		System.out.println(c.getTourJeu());
-		c.joueurAdverse();
-		System.out.println(c.getTourJeu());
-		Piece[] board = c.getBoard();
-		System.out.println(c.getBoard()[12].isEmpty());
-		System.out.println(c.boardToFEN());
-		Piece[] b = Chessboard.fenToBoard(c.boardToFEN());
-		for (int i = 0; i< b.length; i++){
-			System.out.println(b[i]);
-		}
-		c.sauvegarder();
-		c.charger();
-		b = c.getBoard();
-		for (int i = 0; i< b.length; i++){
-			System.out.println(b[i]);
-		}
-		System.out.print(c.getLine(2));
-		System.out.println(c.getLastLine());
-		c.show();
-		c.deplacer(49, 33);
-		c.deplacer(33, 17);
-		c.show();
-
-		System.out.println(c.chaineToMouv("a1a2")[0]);
-		Chessboard.choixMenu();
-		Chessboard.menu();
-		c.show();
-		System.out.println(c.echec(1));
-		System.out.println(c.echecEtMat(1));
 	}
 
 }
