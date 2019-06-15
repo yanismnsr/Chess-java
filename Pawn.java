@@ -66,7 +66,7 @@ public class Pawn extends Piece{
 			pos = Piece.getCase120(Piece.getCase64(index) + coef * Pawn.listeMouvements[i]);	// initialisation de la position avec le premier coup dans le tableau
 			if (pos != -1){														// si on déborde pas
 				p = board.getCase(pos);											// on récupère la case correspondante à la position
-				if (p.getColor() == board.getJoueurAdverse()) {					// si dans la case il y a une pièce adverse
+				if (p.getColor() == this.getCouleurAdverse()) {					// si dans la case il y a une pièce adverse
 					liste.add(pos);												// rajouter la case à la liste des mouvements (on peut la manger)
 				}
 			}
@@ -88,7 +88,7 @@ public class Pawn extends Piece{
 		return mouvements.contains(pos);
 	}
 
-	
+
 
 	public String toString(){
 		if (this.getColor() == 1){

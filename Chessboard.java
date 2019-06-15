@@ -46,7 +46,7 @@ public class Chessboard {
 			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
 			new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(), new Piece(),
 			new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
-			new Tower(1), new Knight(1), new Bishop(1), new King(1), new Queen(1), new Bishop(1), new Knight(1), new Tower(1),
+			new Tower(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1), new Tower(1),
 	};
 	private boolean roque;
 	private String[] history;
@@ -145,6 +145,38 @@ public class Chessboard {
 		}
 		return liste;
 
+	}
+
+
+	public ArrayList<Integer> mouvementsDuJoueur(int numJoueur){
+		ArrayList<Integer> liste = new ArrayList<Integer>();
+		ArrayList<Integer> sousListe = new ArrayList<Integer>();
+		Piece p;
+		for (int i = 0; i < this.board.length; i++){
+			p = this.getCase(i);
+			if (p.getColor() == numJoueur){
+				if (p instanceof Pawn){
+					sousListe = ((Pawn)p).movements(this);
+					liste.addAll(sousListe);
+				}else if(p instanceof Tower){
+					sousListe = ((Tower)p).movements(this);
+					liste.addAll(sousListe);
+				}else if(p instanceof Knight){
+					sousListe = ((Knight)p).movements(this);
+					liste.addAll(sousListe);
+				}else if(p instanceof Bishop){
+					sousListe = ((Bishop)p).movements(this);
+					liste.addAll(sousListe);
+				}else if (p instanceof Queen){
+					sousListe = ((Queen)p).movements(this);
+					liste.addAll(sousListe);
+				}else if (p instanceof King){
+					sousListe = ((King)p).movements(this);
+					liste.addAll(sousListe);
+				}
+			}
+		}
+		return liste;
 	}
 
 
@@ -460,9 +492,9 @@ public class Chessboard {
 		int choix = choixMenu();
 		if (choix == 0){
 			System.exit(0);
+			return new Chessboard();
 		}else if (choix == 1) {
-			Player players[] = nouvellePartie();
-			return new Chessboard(players[0], players[1]);
+			return Chessboard.nouvellePartie();
 		}else{
 			Chessboard c = new Chessboard();
 			c.charger();
@@ -471,22 +503,46 @@ public class Chessboard {
 	}
 
 
-	public static Player[] nouvellePartie(){
+	public static Chessboard nouvellePartie(){
 		Scanner sc = new Scanner(System.in);
-		Player players[] = new Player[2];
+		String players[] = new String[2];
 		do{
 			System.out.println("saisir le nom du joueur 1 : ");
-			String joueur = sc.nextLine();
-			players[0] = new Player(joueur, 1);
-		}while (joueur.length() != 0);
+			players[0] = sc.nextLine();
+		}while (players[0].length() == 0);
 		do{
 			System.out.println("saisir le nom du joueur 2 : ");
-			String joueur = sc.nextLine();
-			players[1] = new Player(joueur, 2);
-		}while (joueur.length() != 0);
-		return players;
+			players[1] = sc.nextLine();
+		}while (players[1].length() == 0);
+		return new Chessboard(players[0], players[1]);
 	}
-	
+
+
+	public boolean echec(int numJoueur){
+		int posRoi = 0;
+		Piece p;
+		for (int i = 0; i < this.board.length; i++) {
+			p = this.getCase(i);
+			if (p instanceof King && p.getColor() == numJoueur){
+				posRoi = i;
+				break;
+			}
+		}
+		int adverse;
+		if (numJoueur == this.getTourJeu()){
+			adverse = this.getJoueurAdverse();
+		}else{
+			adverse = numJoueur;
+		}
+		ArrayList <Integer> a = this.mouvementsDuJoueur(adverse);
+		if (a.contains(posRoi)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+
 
 	public static void main(String[] args) {
 
@@ -518,6 +574,9 @@ public class Chessboard {
 
 		System.out.println(c.chaineToMouv("a1a2")[0]);
 		Chessboard.choixMenu();
+		Chessboard.menu();
+		c.show();
+		System.out.println(c.echec(1));
 	}
 
 }

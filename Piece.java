@@ -34,6 +34,10 @@ public class Piece implements ConstantesDeplacement{
 		return " ";
 	}
 
+	public int getCouleurAdverse(){
+		return 2 - (this.getColor() +1) % 2;
+	}
+
 	public static void main(String[] args) {
 		Piece p = new Piece();
 		System.out.println(p.isEmpty());
