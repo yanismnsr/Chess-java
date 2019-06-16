@@ -19,7 +19,5 @@ public class AI {
 
     public static void main(String[] args) throws IOException, InterruptedException{
         System.out.println(AI.getMove(new Chessboard()));
-
-
     }
 }
