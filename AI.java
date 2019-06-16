@@ -12,7 +12,7 @@ public class AI {
         String line = "";
         String move = "";
         while ((line=buf.readLine())!=null) {
-            move += line;
+            move = line;
         }
         System.out.println(move);
         return move;
