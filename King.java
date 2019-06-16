@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class King extends Piece{
 
 	public static int[] listeMouvements = {-11, -10, -9, -1, 1, 9, 10, 11};
+	public static int[] mouvementsRoque = {-3, 2};
 
 	public King (int color) {
 		super(color);

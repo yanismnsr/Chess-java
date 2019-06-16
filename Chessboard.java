@@ -107,6 +107,26 @@ public class Chessboard {
 		return 2 - (this.getTourJeu() +1) % 2;
 	}
 
+	public boolean getPRoque1(){
+		return this.pRoque1;
+	}
+
+
+	public boolean getGRoque1(){
+		return this.gRoque1;
+	}
+
+
+	public boolean getPRoque2(){
+		return this.pRoque2;
+	}
+
+
+	public boolean getGRoque2(){
+		return this.gRoque2;
+	}
+
+
 	public void joueurAdverse() {
 		this.tourJeu = 2 - (this.getTourJeu() + 1)%2;
 	}
@@ -460,6 +480,8 @@ public class Chessboard {
 		}
 
 
+
+
 		Piece pa = this.getCase(posArrive);
 		if (pa.isEmpty()){
 			this.setCase(posArrive, pd);
@@ -492,6 +514,15 @@ public class Chessboard {
 			player.manger(pa);
 		}
 		this.joueurAdverse();
+		if (this.getCase(posDepart) instanceof King){
+			if (piece.getColor() == 1){
+				this.gRoque1 = false;
+				this.pRoque1 = false;
+			}else{
+				this.pRoque2 = false;
+				this.gRoque2 = false;
+			}
+		}
 		return true;
 
 	}
@@ -650,6 +681,7 @@ public class Chessboard {
 	public void jouer() throws IOException {
 		//this.effacerTerminal();
 		this.show();
+		System.out.println(this.tableauUniquementToFen());
 		Displayer.update(this.tableauUniquementToFen());
 		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
 		System.out.println(this.dicoPrisePassant);
