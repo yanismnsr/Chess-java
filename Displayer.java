@@ -2,7 +2,7 @@ import java.io.IOException;
 
 public class Displayer {
     public static void update(String FEN) throws IOException {
-        Runtime.getRuntime().exec("java -jar chessDisplayer.jar \"" + FEN + "\"");
+        Runtime.getRuntime().exec("java -jar chessDisplayer.jar " + FEN);
 
 
     }

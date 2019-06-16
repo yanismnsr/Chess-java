@@ -650,6 +650,7 @@ public class Chessboard {
 	public void jouer() throws IOException {
 		//this.effacerTerminal();
 		this.show();
+		System.out.println(this.tableauUniquementToFen());
 		Displayer.update(this.tableauUniquementToFen());
 		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
 		System.out.println(this.dicoPrisePassant);
