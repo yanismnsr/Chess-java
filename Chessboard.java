@@ -647,9 +647,11 @@ public class Chessboard {
 	}
 
 
-	public void jouer(){
+	public void jouer() throws IOException, InterruptedException {
 		//this.effacerTerminal();
 		this.show();
+		System.out.println(tableauUniquementToFen());
+		Displayer.update(this.tableauUniquementToFen());
 		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
 		System.out.println(this.dicoPrisePassant);
 		this.deplacer(this.saisirMouvement());
@@ -658,7 +660,7 @@ public class Chessboard {
 		}
 	}
 
-	public static void partie(){
+	public static void partie() throws IOException, InterruptedException{
 		Chessboard board = new Chessboard();
 		board.menu();
 		board.sauvegarder();
@@ -667,7 +669,7 @@ public class Chessboard {
 
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, InterruptedException{
 		Chessboard.partie();
 
 	}
