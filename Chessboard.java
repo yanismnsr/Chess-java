@@ -57,6 +57,7 @@ public class Chessboard {
 	private boolean gRoque2;
 	private boolean pRoque1;
 	private boolean pRoque2;
+	private boolean AI = false;
 
 	private String[] history;
 	private Player joueurs[] = new Player[2];
@@ -663,7 +664,7 @@ public class Chessboard {
 		if (fichier.exists() && !fichier.isDirectory()){
 			sauvegarde = true;
 		}
-		String chaine = "MENU\n- 0 pour terminer le jeu\n- 1 pour commencer une nouvelle partie";
+		String chaine = "MENU\n- 0 pour terminer le jeu\n- 1 pour commencer une nouvelle partie (joueur VS joueur)\n- 3 pour commencer une nouvelle partie (joueur VS IA)";
 		if (sauvegarde){
 			chaine += "\n- 2 pour charger la partie";
 		}
@@ -676,7 +677,7 @@ public class Chessboard {
 		Chessboard.afficherMenu();
 		Scanner sc = new Scanner(System.in);
 		String choix = sc.nextLine();
-		while (choix.length() != 1 || ((int)choix.charAt(0)-(int)'0') > 2 || ((int)choix.charAt(0)-(int)'0') < 0){
+		while (choix.length() != 1 || ((int)choix.charAt(0)-(int)'0') > 3 || ((int)choix.charAt(0)-(int)'0') < 0){
 			Chessboard.effacerTerminal();
 			System.out.println("Choix invalide, saisissez votre choix :");
 			Chessboard.afficherMenu();
@@ -691,8 +692,12 @@ public class Chessboard {
 		if (choix == 0){
 			System.exit(0);
 		}else if (choix == 1) {
-			this.nouvellePartie();
-		}else{
+            this.nouvellePartie();
+        }else if (choix == 3) {
+		    this.AI = true;
+		    this.nouvellePartie();
+        }
+		else{
 			this.charger();
 		}
 	}
@@ -772,20 +777,27 @@ public class Chessboard {
 	}
 
 
-	public void jouer() throws IOException {
+	public void jouer() throws IOException, InterruptedException {
 		//this.effacerTerminal();
 		this.show();
 		System.out.println(this.tableauUniquementToFen());
 		Displayer.update(this.tableauUniquementToFen());
 		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
 		System.out.println(this.dicoPrisePassant);
-		this.deplacer(this.saisirMouvement());
+		if (this.AI) {
+            if (this.tourJeu != 1) {
+                this.deplacer(this.chaineToMouv(new AI().getMove(this)));
+            }
+            else {this.deplacer(this.saisirMouvement());}
+        } else {
+            this.deplacer(this.saisirMouvement());
+        }
 		if (! this.partieFinie()){
 			this.jouer();
 		}
 	}
 
-	public static void partie() throws IOException{
+	public static void partie() throws IOException, InterruptedException{
 		Chessboard board = new Chessboard();
 		board.menu();
 		board.sauvegarder();
@@ -794,7 +806,7 @@ public class Chessboard {
 
 
 
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException, InterruptedException{
 		Chessboard.partie();
 
 	}
