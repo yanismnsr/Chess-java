@@ -196,7 +196,7 @@ public class Chessboard {
 	}
 
 
-	public String boardToFEN(){
+	public String tableauUniquementToFen(){
 		String chaine = "";
 		Piece p;
 		int vide;
@@ -227,6 +227,12 @@ public class Chessboard {
 				chaine += "/";
 			}
 		}
+		return chaine;
+	}
+
+
+	public String boardToFEN(){
+		String chaine = this.tableauUniquementToFen();
 		chaine += " ";
 		if (this.pRoque1){
 			chaine += 'K';
@@ -243,6 +249,8 @@ public class Chessboard {
 		if (!(this.pRoque1 || this.gRoque1 || this.pRoque2 || this.gRoque2)){
 			chaine += "-";
 		}
+		chaine += " ";
+
 		return chaine;
 	}
 
