@@ -25,6 +25,8 @@ public class King extends Piece{
 			}
 		}
 
+		//if (board.)
+
 		return liste;
 
 	}
