@@ -334,8 +334,9 @@ public class Chessboard {
 	}
 
 
-	public static Piece[] fenToBoard(String chaine){
-		String[] lignes = chaine.split("/");
+	public void fenToBoard(String chaine){
+		String tabFen[] = chaine.split(" ");
+		String[] lignes = tabFen[0].split("/");
 		Piece[] board = new Piece[64];
 		int cptBoard = 0;
 		for (String ligne : lignes){
@@ -352,7 +353,53 @@ public class Chessboard {
 				}
 			}
 		}
-		return board;
+		this.board = board;
+
+		String chaineFen = tabFen[1];
+		if (chaineFen == "w"){
+			this.tourJeu = 1;
+		}else if (chaineFen == "b"){
+			this.tourJeu = 2;
+		}
+		chaineFen = tabFen[2];
+		this.pRoque1 = false;
+		this.gRoque1 = false;
+		this.pRoque2 = false;
+		this.gRoque2 = false;
+		for (int i = 0; i < chaineFen.length(); i++){
+			if (chaineFen.charAt(i) == 'K'){
+				this.pRoque1 = true;
+			}else if (chaineFen.charAt(i) == 'Q'){
+				this.gRoque1 = true;
+			}else if (chaineFen.charAt(i) == 'k'){
+				this.pRoque2 = true;
+			}else if (chaineFen.charAt(i) == 'q'){
+				this.gRoque2 = true;
+			}
+		}
+		chaineFen = tabFen[3];
+		if (chaineFen != "-"){
+			int i = 0;
+			while (i < chaineFen.length()){
+				String position = "" + chaineFen.charAt(i) + chaineFen.charAt(i+1);
+				int jpos = (int)chaineFen.charAt(i) - (int)'a';
+				int ipos = (int)chaineFen.charAt(i+1) - (int)'1';
+				int posInt = (7-ipos)*8 + jpos;
+				if (this.getCase(posInt - 8) instanceof Pawn){
+					this.dicoPrisePassant.put(posInt, (Pawn)this.getCase(posInt - 8));
+				}else if (this.getCase(posInt + 8) instanceof Pawn){
+					this.dicoPrisePassant.put(posInt, (Pawn)this.getCase(posInt + 8));
+				}
+			}
+		}
+		chaineFen = tabFen[4];
+		if (chaineFen != "-"){
+			this.demiCoup = Integer.parseInt(chaineFen);
+		}
+		chaineFen = tabFen[5];
+		if (chaineFen != "-"){
+			this.coup = Integer.parseInt(chaineFen);
+		}
 	}
 
 	public void sauvegarder(){
@@ -375,13 +422,12 @@ public class Chessboard {
 		try{
 			FileReader fr = new FileReader(new File("sauvegarde_partie.txt"));
 			BufferedReader br = new BufferedReader(fr);
-			int tourJeu = Integer.parseInt(br.readLine());
 			String line = br.readLine();
-			boolean roque = line.equals("true");
+			this.joueurs[0] = new Player(line, 1);
+			this.joueurs[1] = new Player(line, 2);
 			line = br.readLine();
-			Piece[] board = Chessboard.fenToBoard(line);
+			this.fenToBoard(line);
 			this.tourJeu = tourJeu;
-			this.gRoque1 = roque;
 			this.board = board;
 			br.close();
 			fr.close();
@@ -597,6 +643,10 @@ public class Chessboard {
 		System.out.println("Joueur " + this.getTourJeu());
 		System.out.println("Saisir un mouvement");
 		String mouvement = sc.nextLine();
+		if (mouvement.equals("M")){
+			int tab[] = {100};
+			return tab;
+		}
 		int[] tab_mouvement = this.chaineToMouv(mouvement);
 		while (tab_mouvement.length != 2){
 			System.out.println("mouvement invalide \nsaisir un mouvement");
