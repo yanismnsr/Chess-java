@@ -479,14 +479,8 @@ public class Chessboard {
 			}
 		}
 
-
-
-
 		Piece pa = this.getCase(posArrive);
 		if (pa.isEmpty()){
-			this.setCase(posArrive, pd);
-			this.setCase(posDepart, pa);
-			System.out.println("izurzieurhgzoirghzoirh");
 			if (pd instanceof Pawn){
 				Pawn pawn = (Pawn)pd;
 				if (pawn.isFirstMove() && Math.abs(posArrive - posDepart) == 16){
@@ -507,6 +501,35 @@ public class Chessboard {
 				this.setCase(posDepart, pa);
 				this.dicoPrisePassant.remove(pawn.getPrisePassant());
 			}
+			System.out.println(pd instanceof King);
+			if (pd instanceof King){
+				System.out.println(posDepart);
+				System.out.println(posArrive);
+				if (posArrive == posDepart + 2){
+					this.setCase(posArrive, pd);
+					this.setCase(posDepart, pa);
+					Tower t = (Tower)this.getCase(posDepart + 3);
+					this.setCase(posDepart + 3, new Piece());
+					this.setCase(posDepart + 1, t);
+				}else if (posArrive == posDepart - 2){
+					System.out.println("iuzefizurhgzirughziouh");
+					this.setCase(posArrive, pd);
+					this.setCase(posDepart, pa);
+					Tower t = (Tower)this.getCase(posDepart - 4);
+					this.setCase(posDepart - 4, new Piece());
+					this.setCase(posDepart - 1, t);
+				}
+				if (this.getCase(posDepart).getColor() == 1){
+					this.gRoque1 = false;
+					this.pRoque1 = false;
+				}else{
+					this.pRoque2 = false;
+					this.gRoque2 = false;
+				}
+			}else{
+				this.setCase(posArrive, pd);
+				this.setCase(posDepart, pa);
+			}
 		}else{
 			this.setCase(posArrive, pd);
 			this.setCase(posDepart, new Piece());
@@ -514,13 +537,15 @@ public class Chessboard {
 			player.manger(pa);
 		}
 		this.joueurAdverse();
-		if (this.getCase(posDepart) instanceof King){
-			if (piece.getColor() == 1){
-				this.gRoque1 = false;
-				this.pRoque1 = false;
-			}else{
-				this.pRoque2 = false;
+		if (this.getCase(posDepart) instanceof Tower){
+			if (posDepart == 0){
 				this.gRoque2 = false;
+			}else if(posDepart == 7){
+				this.pRoque2 = false;
+			}else if (posDepart == 56){
+				this.gRoque1 = false;
+			}else if (posDepart == 63){
+				this.pRoque1 = false;
 			}
 		}
 		return true;
