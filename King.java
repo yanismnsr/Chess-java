@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class King extends Piece{
 
 	public static int[] listeMouvements = {-11, -10, -9, -1, 1, 9, 10, 11};
+	public static int[] mouvementsRoque = {-2, 2};
 
 	public King (int color) {
 		super(color);
@@ -20,6 +21,23 @@ public class King extends Piece{
 		for (int i = 0; i < King.listeMouvements.length; i++){
 			pos = Piece.getCase120(Piece.getCase64(index) + King.listeMouvements[i]);
 			if (pos != -1 && !mouvementsInterdits.contains(pos) && board.getCase(pos).getColor() != this.getColor()){
+				liste.add(pos);
+			}
+		}
+
+
+		if (board.getGRoque1() || board.getGRoque2()){
+			pos = Piece.getCase120(Piece.getCase64(index) + King.mouvementsRoque[0]);
+			int pos1 = Piece.getCase120(Piece.getCase64(index) -3);
+			int pos2 = Piece.getCase120(Piece.getCase64(index) - 1);
+			if (pos != -1 && pos1 != -1 && pos2 != -1 && board.getCase(pos).isEmpty() && board.getCase(pos1).isEmpty() && board.getCase(pos2).isEmpty() && !mouvementsInterdits.contains(pos)){
+				liste.add(pos);
+			}
+		}
+		if (board.getPRoque1() || board.getPRoque2()){
+			pos = Piece.getCase120(Piece.getCase64(index) + King.mouvementsRoque[1]);
+			int pos1 = Piece.getCase120(Piece.getCase64(index) + 1);
+			if (pos != -1 && pos1 != -1 && board.getCase(pos).isEmpty() && board.getCase(pos1).isEmpty() && !mouvementsInterdits.contains(pos)){
 				liste.add(pos);
 			}
 		}
