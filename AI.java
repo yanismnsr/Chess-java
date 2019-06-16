@@ -14,6 +14,7 @@ public class AI {
         while ((line=buf.readLine())!=null) {
             move += line;
         }
+        System.out.println(move);
         return move;
     }
 
