@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.awt.Color;
 import java.util.Scanner;
 import java.util.Hashtable;
+import java.util.Enumeration;
 
 public class Chessboard {
 
@@ -38,6 +39,8 @@ public class Chessboard {
 			"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
 			"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 	};
+	public int coup;
+	public int demiCoup;
 	private Hashtable<Integer, Pawn> dicoPrisePassant = new Hashtable<Integer, Pawn>();
 	private int tourJeu;
 	private Piece[] board = {
@@ -253,7 +256,11 @@ public class Chessboard {
 
 	public String boardToFEN(){
 		String chaine = this.tableauUniquementToFen();
-		chaine += " ";
+		if (this.tourJeu == 1){
+			chaine += " w ";
+		}else{
+			chaine += " b ";
+		}
 		if (this.pRoque1){
 			chaine += 'K';
 		}
@@ -269,7 +276,15 @@ public class Chessboard {
 		if (!(this.pRoque1 || this.gRoque1 || this.pRoque2 || this.gRoque2)){
 			chaine += "-";
 		}
-		chaine += " ";
+		Enumeration<Integer> keys = this.dicoPrisePassant.keys();
+		String pp = "";
+		for (;keys.hasMoreElements();){
+			pp += this.coord[keys.nextElement()];
+		}
+		if (pp.length() == 0){
+			pp += "-";
+		}
+		chaine += " " + pp + " " + this.demiCoup + " " + this.coup;
 
 		return chaine;
 	}
@@ -547,6 +562,10 @@ public class Chessboard {
 			}else if (posDepart == 63){
 				this.pRoque1 = false;
 			}
+		}
+		if (this.tourJeu == 1){
+			coup += 1;
+			demiCoup = coup / 2;
 		}
 		return true;
 
