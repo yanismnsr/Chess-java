@@ -3,21 +3,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AI {
-    public static void getMove(Chessboard chessboard) throws IOException, InterruptedException {
+    public static String getMove(Chessboard chessboard) throws IOException, InterruptedException {
         String cmd = "java -jar ChessAI.jar \"" + chessboard.boardToFEN() + "\"";
-        System.out.println(cmd);
         Runtime run = Runtime.getRuntime();
         Process pr = run.exec(cmd);
         pr.waitFor();
         BufferedReader buf = new BufferedReader(new InputStreamReader(pr.getInputStream()));
         String line = "";
+        String move = "";
         while ((line=buf.readLine())!=null) {
-            System.out.println(line);
+            move += line;
         }
+        return move;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException{
-        AI.getMove(new Chessboard());
+        System.out.println(AI.getMove(new Chessboard()));
 
 
     }
