@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Color;
 import java.util.Scanner;
+import java.util.Hashtable;
 
 public class Chessboard {
 
@@ -37,6 +38,7 @@ public class Chessboard {
 			"a2", "b2", "c2", "d2", "e2", "f2", "g2", "h2",
 			"a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
 	};
+	private Hashtable<Integer, Pawn> dicoPrisePassant = new Hashtable<Integer, Pawn>();
 	private int tourJeu;
 	private Piece[] board = {
 			new Tower(2), new Knight(2), new Bishop(2), new Queen(2), new King(2), new Bishop(2), new Knight(2), new Tower(2),
@@ -48,13 +50,20 @@ public class Chessboard {
 			new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
 			new Tower(1), new Knight(1), new Bishop(1), new Queen(1), new King(1), new Bishop(1), new Knight(1), new Tower(1),
 	};
-	private boolean roque;
+	private boolean gRoque1;
+	private boolean gRoque2;
+	private boolean pRoque1;
+	private boolean pRoque2;
+
 	private String[] history;
 	private Player joueurs[] = new Player[2];
 
 	public Chessboard() {
 		this.tourJeu = 1;
-		this.roque = true;
+		this.gRoque1 = true;
+		this.gRoque2 = true;
+		this.pRoque1 = true;
+		this.pRoque2 = true;
 	}
 
 
@@ -67,15 +76,22 @@ public class Chessboard {
 
 	public Chessboard(String player1, String player2) {
 		this.tourJeu = 1;
-		this.roque = true;
+		this.gRoque1 = true;
+		this.gRoque2 = true;
 		this.joueurs[0] = new Player(player1, 1);
 		this.joueurs[1] = new Player(player2, 2);
 	}
 
-	public Chessboard(Piece[] board, int tourJeu, boolean roque){
+	public Chessboard(Piece[] board, int tourJeu, boolean gRoque1, boolean gRoque2){
 		this.board = board;
 		this.tourJeu = tourJeu;
-		this.roque = roque;
+		this.gRoque1 = gRoque1;
+		this.gRoque2 = gRoque2;
+	}
+
+
+	public Hashtable<Integer, Pawn> getDicoPrisePassant(){
+		return this.dicoPrisePassant;
 	}
 
 
@@ -211,6 +227,22 @@ public class Chessboard {
 				chaine += "/";
 			}
 		}
+		chaine += " ";
+		if (this.pRoque1){
+			chaine += 'K';
+		}
+		if (this.gRoque1){
+			chaine += 'Q';
+		}
+		if (this.pRoque2){
+			chaine +='k';
+		}
+		if (this.gRoque2){
+			chaine += 'q';
+		}
+		if (!(this.pRoque1 || this.gRoque1 || this.pRoque2 || this.gRoque2)){
+			chaine += "-";
+		}
 		return chaine;
 	}
 
@@ -285,8 +317,8 @@ public class Chessboard {
 			File fichier = new File("sauvegarde_partie.txt");
 			FileWriter fw = new FileWriter(fichier);
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(this.tourJeu + "\n");
-			bw.write(this.roque + "\n");
+			bw.write(this.joueurs[0] + "\n");
+			bw.write(this.joueurs[1] + "\n");
 			bw.write(this.boardToFEN());
 			bw.close();
 			fw.close();
@@ -306,7 +338,7 @@ public class Chessboard {
 			line = br.readLine();
 			Piece[] board = Chessboard.fenToBoard(line);
 			this.tourJeu = tourJeu;
-			this.roque = roque;
+			this.gRoque1 = roque;
 			this.board = board;
 			br.close();
 			fr.close();
@@ -392,7 +424,6 @@ public class Chessboard {
 			if (!piece.mouvementValide(this, posArrive)){
 				return false;
 			}
-			piece.setFirstMove(false);
 		}else if(pd instanceof Bishop){
 			Bishop piece = (Bishop)pd;
 			if (!piece.mouvementValide(this, posArrive)){
@@ -425,6 +456,27 @@ public class Chessboard {
 		if (pa.isEmpty()){
 			this.setCase(posArrive, pd);
 			this.setCase(posDepart, pa);
+			System.out.println("izurzieurhgzoirghzoirh");
+			if (pd instanceof Pawn){
+				Pawn pawn = (Pawn)pd;
+				if (pawn.isFirstMove() && Math.abs(posArrive - posDepart) == 16){
+					pawn.setPrisePassant(Math.max(posArrive, posDepart) - 8);
+					this.dicoPrisePassant.put(pawn.getPrisePassant(), (Pawn)pd);
+					pawn.setFirstMove(false);
+				}else if(!pawn.isFirstMove() && pawn.getPrisePassant() != -1){
+					this.dicoPrisePassant.remove(pawn.getPrisePassant());
+					pawn.setPrisePassant(-1);
+				}
+			}
+			if (this.dicoPrisePassant.containsKey(posArrive)){
+				Pawn pawn = (Pawn)(this.getCase(this.indexOf(this.dicoPrisePassant.get(posArrive))));
+				Player player = this.joueurs[this.getTourJeu() - 1];
+				player.manger(pawn);
+				this.setCase(this.indexOf(pawn), new Piece());
+				this.setCase(posArrive, pd);
+				this.setCase(posDepart, pa);
+				this.dicoPrisePassant.remove(pawn.getPrisePassant());
+			}
 		}else{
 			this.setCase(posArrive, pd);
 			this.setCase(posDepart, new Piece());
@@ -527,7 +579,7 @@ public class Chessboard {
 		this.joueurs[0] = new Player(players[0], 1);
 		this.joueurs[1] = new Player(players[1], 2);
 		this.tourJeu = 1;
-		this.roque = true;
+		this.gRoque1 = true;
 	}
 
 
@@ -588,9 +640,10 @@ public class Chessboard {
 
 
 	public void jouer(){
-		this.effacerTerminal();
+		//this.effacerTerminal();
 		this.show();
 		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
+		System.out.println(this.dicoPrisePassant);
 		this.deplacer(this.saisirMouvement());
 		while (! this.partieFinie()){
 			this.jouer();
@@ -600,6 +653,7 @@ public class Chessboard {
 	public static void partie(){
 		Chessboard board = new Chessboard();
 		board.menu();
+		board.sauvegarder();
 		board.jouer();
 	}
 

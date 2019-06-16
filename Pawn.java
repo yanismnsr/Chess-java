@@ -6,6 +6,7 @@ public class Pawn extends Piece{
 	private static int[] listeMouvements = {-10, -9, -11};						// Liste de mouvements possibles selon le plateau120
 	public static int[] listeFirstMoove = {-20, -21, -19};						// liste des mouvements complémentaires si on est dans le premier mouvement
 	private boolean firstMove;													// si le pion n'a pas encore bougé
+	private int prisePassant = -1;
 
 	public Pawn(int color) {
 		super(color);
@@ -14,6 +15,11 @@ public class Pawn extends Piece{
 
 	public void setFirstMove(boolean b) {
 		this.firstMove = b;
+	}
+
+
+	public int getPrisePassant(){
+		return this.prisePassant;
 	}
 
 
@@ -66,7 +72,7 @@ public class Pawn extends Piece{
 			pos = Piece.getCase120(Piece.getCase64(index) + coef * Pawn.listeMouvements[i]);	// initialisation de la position avec le premier coup dans le tableau
 			if (pos != -1){														// si on déborde pas
 				p = board.getCase(pos);											// on récupère la case correspondante à la position
-				if (p.getColor() == this.getCouleurAdverse()) {					// si dans la case il y a une pièce adverse
+				if (p.getColor() == this.getCouleurAdverse() || board.getDicoPrisePassant().containsKey(pos)) {					// si dans la case il y a une pièce adverse
 					liste.add(pos);												// rajouter la case à la liste des mouvements (on peut la manger)
 				}
 			}
@@ -105,6 +111,15 @@ public class Pawn extends Piece{
 		}else{
 			return "p";
 		}
+	}
+
+	public void setPrisePassant(int pos){
+		this.prisePassant = pos;
+	}
+
+
+	public boolean isFirstMove(){
+		return this.firstMove;
 	}
 
 
