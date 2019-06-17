@@ -57,7 +57,6 @@ public class Chessboard {
 	private boolean gRoque2;
 	private boolean pRoque1;
 	private boolean pRoque2;
-	private boolean AI = false;
 
 	private String[] history;
 	private Player joueurs[] = new Player[2];
@@ -337,6 +336,7 @@ public class Chessboard {
 
 	public void fenToBoard(String chaine){
 		String tabFen[] = chaine.split(" ");
+		System.out.println(tabFen.length);
 		String[] lignes = tabFen[0].split("/");
 		Piece[] board = new Piece[64];
 		int cptBoard = 0;
@@ -379,7 +379,7 @@ public class Chessboard {
 			}
 		}
 		chaineFen = tabFen[3];
-		if (chaineFen != "-"){
+		if (!chaineFen.contains("-")){
 			int i = 0;
 			while (i < chaineFen.length()){
 				String position = "" + chaineFen.charAt(i) + chaineFen.charAt(i+1);
@@ -425,6 +425,7 @@ public class Chessboard {
 			BufferedReader br = new BufferedReader(fr);
 			String line = br.readLine();
 			this.joueurs[0] = new Player(line, 1);
+			line = br.readLine();
 			this.joueurs[1] = new Player(line, 2);
 			line = br.readLine();
 			this.fenToBoard(line);
@@ -492,7 +493,44 @@ public class Chessboard {
 	}
 
 
-	public boolean deplacer(int[] tabDep){
+	public void afficheMenuJeu(){
+		System.out.println("1 - Reprendre la partie\n2 - Commencer une nouvelle partie\n3 - Sauvegarder la partie\n4 - Charger une partie\n5 - Quitter le jeu");
+	}
+
+	public int choixMenuJeu(){
+		Scanner sc = new Scanner(System.in);
+		String choix;
+		do {
+			Chessboard.effacerTerminal();
+			this.afficheMenuJeu();
+			choix = sc.nextLine();
+		}while (Integer.parseInt(choix) <= 0 || Integer.parseInt(choix) > 5);
+		return Integer.parseInt(choix);
+	}
+
+	public void menuJeu() throws IOException{
+		int choix = this.choixMenuJeu();
+		if (choix == 1){
+			this.jouer();
+		}else if (choix == 2){
+			this.partie();
+		}else if (choix == 3){
+			this.sauvegarder();
+			this.jouer();
+		}else if (choix == 4){
+			this.charger();
+			this.jouer();
+		}else if (choix == 5){
+			System.exit(0);
+		}
+	}
+
+
+	public boolean deplacer(int[] tabDep) throws IOException{
+		if (tabDep.length == 1 && tabDep[0] == 100){
+			this.menuJeu();
+			return true;
+		}
 		if (tabDep.length != 2){
 			return false;
 		}
@@ -552,6 +590,43 @@ public class Chessboard {
 				}else if(!pawn.isFirstMove() && pawn.getPrisePassant() != -1){
 					this.dicoPrisePassant.remove(pawn.getPrisePassant());
 					pawn.setPrisePassant(-1);
+				}
+				if (pawn.getColor() == 1 && posArrive < 8 && posArrive >= 0){
+					System.out.println("vous pouvez effectuer une promotion :");
+					System.out.println("1 - Tour\n2 - Fou\n3 - Cavalier");
+					Scanner sc = new Scanner(System.in);
+					int choix;
+					do{
+						choix = Integer.parseInt(sc.nextLine());
+					}while (choix < 1 && choix > 3);
+					if (choix == 1){
+						this.setCase(posArrive, new Tower(1));
+						this.setCase(posDepart, new Piece());
+					}else if (choix == 2){
+						this.setCase(posArrive, new Bishop(1));
+						this.setCase(posDepart, new Piece());
+					}else if (choix == 3){
+						this.setCase(posArrive, new Knight(1));
+						this.setCase(posDepart, new Piece());
+					}
+				}else if (pawn.getColor() == 1 && posArrive < 64 && posArrive >= 56){
+					System.out.println("vous pouvez effectuer une promotion :");
+					System.out.println("1 - Tour\n2 - Fou\n3 - Cavalier");
+					Scanner sc = new Scanner(System.in);
+					int choix;
+					do{
+						choix = Integer.parseInt(sc.nextLine());
+					}while (choix < 1 && choix > 3);
+					if (choix == 1){
+						this.setCase(posArrive, new Tower(2));
+						this.setCase(posDepart, new Piece());
+					}else if (choix == 2){
+						this.setCase(posArrive, new Bishop(2));
+						this.setCase(posDepart, new Piece());
+					}else if (choix == 3){
+						this.setCase(posArrive, new Knight(2));
+						this.setCase(posDepart, new Piece());
+					}
 				}
 			}
 			if (this.dicoPrisePassant.containsKey(posArrive)){
@@ -639,20 +714,23 @@ public class Chessboard {
 	}
 
 
-	public int[] saisirMouvement(){
+	public int[] saisirMouvement(String mouvement) throws IOException{
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Joueur " + this.getTourJeu());
 		System.out.println("Saisir un mouvement");
-		String mouvement = sc.nextLine();
 		if (mouvement.equals("M")){
-			int tab[] = {100};
-			return tab;
+			this.menuJeu();
 		}
 		int[] tab_mouvement = this.chaineToMouv(mouvement);
-		while (tab_mouvement.length != 2){
+		boolean menu = false;
+		while (tab_mouvement.length != 2 && !menu){
 			System.out.println("mouvement invalide \nsaisir un mouvement");
 			mouvement = sc.nextLine();
 			tab_mouvement = this.chaineToMouv(mouvement);
+			if (mouvement.equals("M")){
+				this.menuJeu();
+				return new int[2];
+			}
 		}
 		return tab_mouvement;
 	}
@@ -664,7 +742,7 @@ public class Chessboard {
 		if (fichier.exists() && !fichier.isDirectory()){
 			sauvegarde = true;
 		}
-		String chaine = "MENU\n- 0 pour terminer le jeu\n- 1 pour commencer une nouvelle partie (joueur VS joueur)\n- 3 pour commencer une nouvelle partie (joueur VS IA)";
+		String chaine = "MENU\n- 0 pour terminer le jeu\n- 1 pour commencer une nouvelle partie";
 		if (sauvegarde){
 			chaine += "\n- 2 pour charger la partie";
 		}
@@ -677,7 +755,7 @@ public class Chessboard {
 		Chessboard.afficherMenu();
 		Scanner sc = new Scanner(System.in);
 		String choix = sc.nextLine();
-		while (choix.length() != 1 || ((int)choix.charAt(0)-(int)'0') > 3 || ((int)choix.charAt(0)-(int)'0') < 0){
+		while (choix.length() != 1 || ((int)choix.charAt(0)-(int)'0') > 2 || ((int)choix.charAt(0)-(int)'0') < 0){
 			Chessboard.effacerTerminal();
 			System.out.println("Choix invalide, saisissez votre choix :");
 			Chessboard.afficherMenu();
@@ -692,12 +770,8 @@ public class Chessboard {
 		if (choix == 0){
 			System.exit(0);
 		}else if (choix == 1) {
-            this.nouvellePartie();
-        }else if (choix == 3) {
-		    this.AI = true;
-		    this.nouvellePartie();
-        }
-		else{
+			this.nouvellePartie();
+		}else{
 			this.charger();
 		}
 	}
@@ -777,27 +851,25 @@ public class Chessboard {
 	}
 
 
-	public void jouer() throws IOException, InterruptedException {
-		//this.effacerTerminal();
+	public void jouer() throws IOException {
+		this.effacerTerminal();
 		this.show();
-		System.out.println(this.tableauUniquementToFen());
 		Displayer.update(this.tableauUniquementToFen());
 		System.out.println("C'est au joueur " + this.joueurs[this.getTourJeu()-1] + " de jouer");
 		System.out.println(this.dicoPrisePassant);
-		if (this.AI) {
-            if (this.tourJeu != 1) {
-                this.deplacer(this.chaineToMouv(new AI().getMove(this)));
-            }
-            else {this.deplacer(this.saisirMouvement());}
-        } else {
-            this.deplacer(this.saisirMouvement());
-        }
-		if (! this.partieFinie()){
-			this.jouer();
+		Scanner sc = new Scanner(System.in);
+		String choix = sc.nextLine();
+		if (choix.equals("M")){
+			this.menuJeu();
+		}else{
+			this.deplacer(this.saisirMouvement(choix));
+			if (! this.partieFinie()){
+				this.jouer();
+			}
 		}
 	}
 
-	public static void partie() throws IOException, InterruptedException{
+	public static void partie() throws IOException{
 		Chessboard board = new Chessboard();
 		board.menu();
 		board.sauvegarder();
@@ -806,7 +878,7 @@ public class Chessboard {
 
 
 
-	public static void main(String[] args) throws IOException, InterruptedException{
+	public static void main(String[] args) throws IOException{
 		Chessboard.partie();
 
 	}
