@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public class Knight extends Piece{
@@ -10,38 +13,23 @@ public class Knight extends Piece{
 	}
 
 
-	public ArrayList<Integer> casesMangeables(Chessboard board){
-
-		ArrayList<Integer> liste = new ArrayList<Integer>();
-		int pos;
+	private ArrayList<Integer> function(Chessboard board, int option){
 		int index = board.indexOf(this);
-
-		for (int i = 0; i < listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + listeMouvements[i]);
-			if (pos != -1 && board.getCase(pos).getColor() == this.getColor()){
-				liste.add(pos);
-			}
+		IntStream stream = Arrays.stream(Knight.listeMouvements).map(x -> Piece.getCase120(Piece.getCase64(index) + x));
+		switch (option){
+			case 0: stream = stream.filter(x -> x != -1 && board.getCase(x).getColor() == this.getColor());
+			case 1: stream = stream.filter(x -> x != -1 && board.getCase(x).getColor() != this.getColor());
 		}
-
-		return liste;
+		return  new ArrayList<>(stream.boxed().collect(Collectors.toList()));
 
 	}
 
+	public ArrayList<Integer> casesMangeables(Chessboard board){
+		return function(board, 0);
+	}
 
 	public ArrayList<Integer> movements(Chessboard board){
-
-		ArrayList<Integer> liste = new ArrayList<Integer>();
-		int pos;
-		int index = board.indexOf(this);
-
-		for (int i = 0; i < Knight.listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + Knight.listeMouvements[i]);
-			if (pos != -1 && board.getCase(pos).getColor() != this.getColor()){
-				liste.add(pos);
-			}
-		}
-
-		return liste;
+		return function(board, 1);
 	}
 
 

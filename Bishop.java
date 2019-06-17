@@ -11,45 +11,42 @@ public class Bishop extends Piece{
 	}
 
 
-	public ArrayList<Integer> casesMangeables(Chessboard board){
-
-		ArrayList<Integer> liste = new ArrayList<Integer>();
+	private ArrayList<Integer> function(Chessboard board, int option) {
+		ArrayList<Integer> liste = new ArrayList();
 		int index = board.indexOf(this);
-		int pos;
-		for (int i = 0; i < Bishop.listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + Bishop.listeMouvements[i]);
-			for (int j = 0; pos != -1 && board.getCase(pos).isEmpty(); j++){
+		int i = 0;
+
+		while(i < listeMouvements.length) {
+			int pos = Piece.getCase120(Piece.getCase64(index) + listeMouvements[i]);
+
+			for(int j = 0; pos != -1 && board.getCase(pos).isEmpty(); ++j) {
 				liste.add(pos);
-				pos = Piece.getCase120(Piece.getCase64(index) + j * Bishop.listeMouvements[i]);
+				pos = Piece.getCase120(Piece.getCase64(index) + j * listeMouvements[i]);
 			}
-			if (pos != -1 && board.getCase(pos).getColor() == this.getColor()){
-				liste.add(pos);
+
+			switch(option) {
+				case 0:
+					if (pos != -1 && board.getCase(pos).getColor() == this.getColor()) {
+						liste.add(pos);
+					}
+				case 1:
+					if (pos != -1 && board.getCase(pos).getColor() != this.getColor()) {
+						liste.add(pos);
+					}
+				default:
+					++i;
 			}
 		}
 
 		return liste;
-
 	}
 
+	public ArrayList<Integer> casesMangeables(Chessboard board) {
+		return this.function(board, 0);
+	}
 
-	public ArrayList<Integer> movements(Chessboard board){
-
-		ArrayList<Integer> liste = new ArrayList<Integer>();
-		int pos;
-		int index = board.indexOf(this);
-
-		for (int i = 0; i < Bishop.listeMouvements.length; i++){
-			pos = Piece.getCase120(Piece.getCase64(index) + Bishop.listeMouvements[i]);
-			for (int j = 2; pos != -1 && board.getCase(pos).isEmpty(); j++){
-				liste.add(pos);
-				pos = Piece.getCase120(Piece.getCase64(index) + j * Bishop.listeMouvements[i]);
-			}
-			if (pos != -1 && board.getCase(pos).getColor() != this.getColor()){
-				liste.add(pos);
-			}
-		}
-		return liste;
-
+	public ArrayList<Integer> movements(Chessboard board) {
+		return this.function(board, 1);
 	}
 
 
